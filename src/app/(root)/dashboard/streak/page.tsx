@@ -71,8 +71,8 @@ export default function StreakPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center py-10 min-h-screen bg-background">
-      <div className="w-full max-w-4xl flex flex-col items-center">
+    <div className="flex flex-col items-center py-10">
+      <div className="w-full flex flex-col items-center">
         <h1 className="text-3xl font-bold text-primary mb-3 flex items-center gap-3">
           <Flame className="text-orange-500 w-7 h-7" />
           Streak: <span className="ml-2 text-4xl">{streak}</span>
@@ -82,17 +82,14 @@ export default function StreakPage() {
           {new Date().getFullYear()}.
         </div>
         {loading ? (
-          <div className="animate-pulse h-8 w-full bg-muted rounded-lg my-12" />
+          <div className="animate-pulse h-50 w-2/3 bg-muted rounded-lg" />
         ) : (
-          <StreakGrid days={days} />
+          <div className="overflow-x-auto overflow-visible w-full ">
+            <div className="mx-auto items-center">
+              <StreakGrid days={days} />
+            </div>
+          </div>
         )}
-        <div className="mt-8 max-w-xl text-text text-center">
-          <span className="font-semibold text-green-600">Green</span>: scanned
-          on time. <span className="font-semibold text-red-500">Red</span>:
-          missed scan.{" "}
-          <span className="font-semibold text-muted-foreground">Gray</span>:
-          future day.
-        </div>
       </div>
     </div>
   );
@@ -129,21 +126,9 @@ export default function StreakPage() {
     }
 
     return (
-      <div className="flex flex-col">
-        {/* Month labels */}
-        <div className="flex flex-row ml-6 mb-1">
-          {monthLabels.map((label, i) => (
-            <div
-              key={i}
-              className="w-6 text-xs text-muted-foreground font-bold text-center"
-            >
-              {label}
-            </div>
-          ))}
-        </div>
-
+      <div className="flex flex-col items-center w-full overflow-auto mx-auto">
         {/* Grid */}
-        <div className="flex flex-row">
+        <div className="flex flex-row mx-auto">
           {/* Week columns */}
           {weeks.map((week, wi) => (
             <div key={wi} className="flex flex-col">
@@ -162,18 +147,18 @@ export default function StreakPage() {
 
                 let color = "";
                 if (beforeCreated) {
-                  color = "bg-muted border-muted-foreground/30 opacity-40";
+                  color = "bg-muted border-muted opacity-20";
                 } else if (isFuture) {
                   color = "bg-muted-foreground/20 border-muted";
                 } else if (cell.success) {
-                  color = "bg-green-500 border-green-600";
+                  color = "bg-green-400 border-green-500";
                 } else if (
                   isToday(cell.date) ||
                   isBefore(cell.date, new Date())
                 ) {
                   color = "bg-red-400 border-red-500";
                 } else {
-                  color = "bg-muted-foreground/20 border-muted";
+                  color = "bg-muted-foreground/20 border-black/40";
                 }
                 return (
                   <motion.div

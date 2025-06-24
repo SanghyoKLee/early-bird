@@ -143,3 +143,10 @@
     @apply bg-background text-foreground;
   }
 }
+/* styles/globals.css */
+@media (min-width: 1700px) {
+  .streak-scroll {
+    overflow-x: visible !important;
+    min-width: 0 !important;
+  }
+}
