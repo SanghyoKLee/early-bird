@@ -57,7 +57,7 @@ export const SignInForm = () => {
         setSubmitError(result.error);
         return;
       }
-      startTransition(() => router.push("/dashboard"));
+      startTransition(() => router.push("/dashboard/streak"));
     } catch {
       setSubmitError("An unexpected error occurred.");
     }
@@ -129,14 +129,21 @@ export const SignInForm = () => {
                 {submitError}
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="w-full hover:cursor-pointer"
+              disabled={isPending}
+            >
               {isPending ? "Signing In..." : "Sign In"}
             </Button>
           </form>
         </Form>
-        <div className="text-xs text-text-light text-center mt-2">
+        <div className="text-sm text-text-light text-center mt-2">
           Don&apos;t have an account?{" "}
-          <a href="/register" className="text-primary underline font-medium">
+          <a
+            href="/auth/register"
+            className="text-secondary-dark underline font-medium"
+          >
             Register
           </a>
         </div>

@@ -31,6 +31,7 @@
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
+  --color-secondary-dark: var(--secondary-dark);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -51,8 +52,9 @@
 
   /* Brand palette */
   --primary: #ffd96a; /* Sunrise yellow */
-  --primary-hover: #fee188; /* Sunrise yellow */
-  --secondary: #83daf2; /* Clear sky blue */
+  --primary-hover: #fee188;
+  --secondary: #74cde6; /* Clear sky blue */
+  --secondary-dark: #3996af;
   --accent: #7be495; /* Fresh green accent */
   --background: #ffffff; /* Off-white, morning light */
   --surface: #ffffff; /* Clean white for cards */
@@ -60,7 +62,7 @@
   --text: #22223b; /* Deep navy */
   --text-light: #737488; /* Muted text */
   --success: #50b78b; /* For positive feedback */
-  --danger: #ff8373; /* For errors/alerts */
+  --destructive: #f55451; /* For errors/alerts */
 
   /* Roles (shadcn/ui-style) */
   --color-primary: var(--primary);

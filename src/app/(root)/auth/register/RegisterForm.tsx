@@ -82,7 +82,7 @@ export default function RegisterForm() {
         setSubmitError(signInResponse.error);
         return;
       }
-      startTransition(() => router.push("/dashboard"));
+      startTransition(() => router.push("/dashboard/set-wake-time"));
     } catch {
       setSubmitError("An unexpected error occurred.");
     }
@@ -193,18 +193,25 @@ export default function RegisterForm() {
               )}
             />
             {submitError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-3 py-2 text-center">
+              <div className="bg-red-50 border border-red-200 text-destructive text-sm rounded-lg px-3 py-2 text-center">
                 {submitError}
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="w-full hover:cursor-pointer"
+              disabled={isPending}
+            >
               {isPending ? "Registering..." : "Register"}
             </Button>
           </form>
         </Form>
-        <div className="text-xs text-text-light text-center mt-2">
+        <div className="text-sm text-text-light text-center mt-2">
           Already have an account?{" "}
-          <a href="/sign-in" className="text-primary underline font-medium">
+          <a
+            href="/auth/signin"
+            className="text-secondary-dark underline font-medium"
+          >
             Sign In
           </a>
         </div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 export function HeroSection() {
   return (
     <section className="text-center py-12">
-      <h1 className="text-5xl font-extrabold text-primary mb-4 leading-tight">
+      <h1 className="text-5xl font-extrabold text-primary mb-4 leading-tight text-balance">
         Wake Up On Time,
         <br />
         <span className="text-secondary">Beat The Snooze</span>
