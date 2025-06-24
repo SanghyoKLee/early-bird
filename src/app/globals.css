@@ -78,8 +78,8 @@
   /* Role-based foregrounds */
   --primary-foreground: #141414;
   --secondary-foreground: #12546b;
-  --accent-foreground: #164d34;
-  --danger-foreground: #72181c;
+  --accent-foreground: #0d3d27;
+  --danger-foreground: #110202;
   --success-foreground: #145c35;
 }
 
@@ -141,12 +141,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-/* styles/globals.css */
-@media (min-width: 1700px) {
-  .streak-scroll {
-    overflow-x: visible !important;
-    min-width: 0 !important;
   }
 }
