@@ -22,6 +22,9 @@ export const users = pgTable("users", {
   updated_at: timestamp("updated_at", { mode: "string", withTimezone: true })
     .defaultNow()
     .notNull(), // update this via app/trigger
+  scan_start_at: timestamp("scan_start", { mode: "string", withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
 // QRCODES TABLE (serial PK, user_id is uuid FK)

@@ -37,12 +37,12 @@ export default function StreakPage() {
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState<{ date: Date; success: boolean }[]>([]);
   const [streak, setStreak] = useState(0);
-  const [createdAt, setCreatedAt] = useState<Date | null>(null);
+  const [scanStartAt, setScanStartAt] = useState<Date | null>(null);
 
   useEffect(() => {
     fetch("/api/scans")
       .then((res) => res.json())
-      .then(({ scans, created_at }) => {
+      .then(({ scans, scan_start_at }) => {
         const scanMap = new Map<string, boolean>();
         for (const scan of scans) {
           const dateKey = getDateKey(new Date(scan.scanned_at));
@@ -53,7 +53,7 @@ export default function StreakPage() {
             scanMap.set(dateKey, false);
           }
         }
-        setCreatedAt(created_at ? new Date(created_at) : null);
+        setScanStartAt(scan_start_at ? new Date(scan_start_at) : null);
         // Generate all days in the year
         const year = new Date().getFullYear();
         const start = startOfYear(new Date(year, 0, 1));
@@ -143,7 +143,7 @@ export default function StreakPage() {
 
                 // NEW: Before account creation? Render as dim/inactive
                 const beforeCreated =
-                  createdAt && isBefore(cell.date, createdAt);
+                  scanStartAt && isBefore(cell.date, scanStartAt);
 
                 let color = "";
                 if (beforeCreated) {
@@ -173,7 +173,7 @@ export default function StreakPage() {
                   `}
                     title={`${format(cell.date, "EEE, MMM d yyyy")} - ${
                       beforeCreated
-                        ? "Before signup"
+                        ? "Before tracking"
                         : isFuture
                         ? "Future"
                         : cell.success

@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "scan_start" timestamp with time zone DEFAULT now() NOT NULL;

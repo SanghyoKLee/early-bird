@@ -18,11 +18,11 @@ export async function GET() {
 
   // Get user's created_at
   const userRows = await db
-    .select({ created_at: users.created_at })
+    .select({ scan_start_at: users.scan_start_at })
     .from(users)
     .where(eq(users.id, session.user.id));
 
-  const created_at = userRows[0]?.created_at ?? null;
+  const scan_start_at = userRows[0]?.scan_start_at ?? null;
 
-  return NextResponse.json({ scans: allScans, created_at });
+  return NextResponse.json({ scans: allScans, scan_start_at });
 }
