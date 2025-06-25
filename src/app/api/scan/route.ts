@@ -26,6 +26,25 @@ export async function POST(req: Request) {
   }
   const user = userRows[0];
 
+  const today = new Date();
+  const scanStartDate = new Date(user.scan_start_at);
+
+  // Compare only the date part
+  const isSameDay =
+    today.getFullYear() === scanStartDate.getFullYear() &&
+    today.getMonth() === scanStartDate.getMonth() &&
+    today.getDate() === scanStartDate.getDate();
+
+  if (isSameDay) {
+    return NextResponse.json(
+      {
+        error: "A full night has not passed yet! Try again tomorrow. ",
+        status: "not-counted",
+      },
+      { status: 400 }
+    );
+  }
+
   // 3. If email provided, check it matches
   if (email && user.email !== email) {
     return NextResponse.json({ error: "Incorrect email" }, { status: 400 });

@@ -33,7 +33,7 @@ export default function DashboardLayout({
             </button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-[220px]">
-            <SheetTitle>Sidebar</SheetTitle>
+            <SheetTitle></SheetTitle>
             <DashboardSidebar onNavigate={() => setOpen(false)} />
           </SheetContent>
         </Sheet>
