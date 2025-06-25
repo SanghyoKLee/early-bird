@@ -25,7 +25,6 @@ export default function ScanPage({
   const [showConfetti, setShowConfetti] = useState(false);
   const [minutesLate, setMinutesLate] = useState<number>(0);
 
-  // Optional: Prefill email if signed in
   useEffect(() => {
     if (session?.user?.email) setEmail(session.user.email);
   }, [session?.user?.email]);
@@ -33,7 +32,6 @@ export default function ScanPage({
   useEffect(() => {
     if (step === "success") {
       setShowConfetti(true);
-      // Show confetti for 3s, then fade out for 0.7s
       setTimeout(() => setShowConfetti(false), 5000);
     }
   }, [step]);
@@ -43,13 +41,24 @@ export default function ScanPage({
     setLoading(true);
     setMessage("");
 
-    // Call API to validate password and record scan
+    // ---- NEW: Get local device time (ISO string, no timezone offset) ----
+    const localDate = new Date();
+    const localDateTime = `${localDate.getFullYear()}-${String(
+      localDate.getMonth() + 1
+    ).padStart(2, "0")}-${String(localDate.getDate()).padStart(
+      2,
+      "0"
+    )}T${String(localDate.getHours()).padStart(2, "0")}:${String(
+      localDate.getMinutes()
+    ).padStart(2, "0")}:${String(localDate.getSeconds()).padStart(2, "0")}`;
+
     const res = await fetch("/api/scan", {
       method: "POST",
       body: JSON.stringify({
-        code: code,
+        code,
         email,
         password,
+        localDateTime, // <--- Send the local time as string
       }),
       headers: { "Content-Type": "application/json" },
     });
@@ -63,11 +72,9 @@ export default function ScanPage({
       return;
     }
 
-    // Show feedback
     if (data.status === "success") {
       setStep("success");
       setShowConfetti(true);
-      // setTimeout(() => setShowConfetti(false), 3500);
     } else if (data.status === "almost") {
       setStep("almost");
     } else if (data.status === "late") {

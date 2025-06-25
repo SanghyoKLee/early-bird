@@ -24,6 +24,7 @@ export async function POST(request: Request) {
     }
 
     const { username, email, password } = parsedData.data;
+    const { scan_start_at } = data;
     const emailLower = email.toLowerCase();
 
     // Check if a user with the given email already exists
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
       password_hash,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      scan_start_at: scan_start_at,
     });
 
     return NextResponse.json({ success: true });

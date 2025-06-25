@@ -53,9 +53,17 @@ export default function RegisterForm() {
   async function onRegisterFormSubmit(values: z.infer<typeof registerSchema>) {
     setSubmitError(null);
     try {
+      const today = new Date();
+      const localDateStr = `${today.getFullYear()}-${String(
+        today.getMonth() + 1
+      ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+      // Merge values with scan_start_at
+      const payload = { ...values, scan_start_at: localDateStr };
+
       const res = await fetch("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
 

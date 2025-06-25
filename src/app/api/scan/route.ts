@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
-  const { code, email, password } = await req.json();
+  const { code, email, password, localDateTime } = await req.json();
 
   // 1. Find QR code entry
   const qrRows = await db.select().from(qrcodes).where(eq(qrcodes.code, code));
@@ -26,14 +26,28 @@ export async function POST(req: Request) {
   }
   const user = userRows[0];
 
-  const today = new Date();
-  const scanStartDate = new Date(user.scan_start_at);
+  let scanNow: Date;
+  if (localDateTime) {
+    scanNow = new Date(localDateTime);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    scanNow = new Date(); // fallback, but shouldn't happen
+  }
 
-  // Compare only the date part
+  const scanStartDate = user.scan_start_at
+    ? new Date(user.scan_start_at)
+    : null;
+  if (!scanStartDate) {
+    return NextResponse.json(
+      { error: "Account missing start date." },
+      { status: 400 }
+    );
+  }
+  // Compare only the date part (all assumed local to user)
   const isSameDay =
-    today.getFullYear() === scanStartDate.getFullYear() &&
-    today.getMonth() === scanStartDate.getMonth() &&
-    today.getDate() === scanStartDate.getDate();
+    scanNow.getFullYear() === scanStartDate.getFullYear() &&
+    scanNow.getMonth() === scanStartDate.getMonth() &&
+    scanNow.getDate() === scanStartDate.getDate();
 
   if (isSameDay) {
     return NextResponse.json(

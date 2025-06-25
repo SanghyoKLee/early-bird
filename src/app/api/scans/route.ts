@@ -23,6 +23,7 @@ export async function GET() {
     .where(eq(users.id, session.user.id));
 
   const scan_start_at = userRows[0]?.scan_start_at ?? null;
+  console.log(scan_start_at);
 
   return NextResponse.json({ scans: allScans, scan_start_at });
 }

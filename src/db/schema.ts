@@ -1,5 +1,6 @@
 import {
   boolean,
+  date,
   integer,
   pgTable,
   serial,
@@ -22,9 +23,9 @@ export const users = pgTable("users", {
   updated_at: timestamp("updated_at", { mode: "string", withTimezone: true })
     .defaultNow()
     .notNull(), // update this via app/trigger
-  scan_start_at: timestamp("scan_start", { mode: "string", withTimezone: true })
-    .defaultNow()
-    .notNull(),
+  scan_start_at: date("scan_start", {
+    mode: "string", // (or "date" if you want a JS Date, but string is safer for just YYYY-MM-DD)
+  }),
 });
 
 // QRCODES TABLE (serial PK, user_id is uuid FK)

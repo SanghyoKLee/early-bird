@@ -20,9 +20,14 @@ export async function POST() {
     .delete(userSettings)
     .where(eq(userSettings.user_id, session.user.id));
 
+  const today = new Date();
+  const localDateStr = `${today.getFullYear()}-${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
   await db
     .update(users)
-    .set({ scan_start_at: new Date().toISOString() })
+    .set({ scan_start_at: localDateStr })
     .where(eq(users.id, session.user.id));
   // Add any additional user-data deletions as needed
 

@@ -14,11 +14,6 @@ import {
 import { Flame } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Utility
-function getDateKey(date: Date) {
-  return format(date, "yyyy-MM-dd");
-}
-
 // Calculate current streak (consecutive days up to today, ending at today or yesterday if missed)
 function calcStreak(days: { date: Date; success: boolean }[]) {
   let streak = 0;
@@ -32,6 +27,12 @@ function calcStreak(days: { date: Date; success: boolean }[]) {
   }
   return streak;
 }
+function getLocalDateKey(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(date.getDate()).padStart(2, "0")}`;
+}
 
 export default function StreakPage() {
   const [loading, setLoading] = useState(true);
@@ -39,13 +40,19 @@ export default function StreakPage() {
   const [streak, setStreak] = useState(0);
   const [scanStartAt, setScanStartAt] = useState<Date | null>(null);
 
+  function parseLocalDateString(dateString: string) {
+    // dateString: "2025-06-25"
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day); // JS months are 0-based
+  }
+
   useEffect(() => {
     fetch("/api/scans")
       .then((res) => res.json())
       .then(({ scans, scan_start_at }) => {
         const scanMap = new Map<string, boolean>();
         for (const scan of scans) {
-          const dateKey = getDateKey(new Date(scan.scanned_at));
+          const dateKey = getLocalDateKey(new Date(scan.scanned_at));
           // Only count as success if any scan was successful for that day
           if (!scanMap.has(dateKey) && scan.success) {
             scanMap.set(dateKey, true);
@@ -53,8 +60,9 @@ export default function StreakPage() {
             scanMap.set(dateKey, false);
           }
         }
-        setScanStartAt(scan_start_at ? new Date(scan_start_at) : null);
-        // Generate all days in the year
+        setScanStartAt(
+          scan_start_at ? parseLocalDateString(scan_start_at) : null
+        ); // Generate all days in the year
         const year = new Date().getFullYear();
         const start = startOfYear(new Date(year, 0, 1));
         const end = endOfYear(new Date(year, 0, 1));
@@ -62,7 +70,7 @@ export default function StreakPage() {
         const allDays: { date: Date; success: boolean }[] = [];
         for (let i = 0; i < numDays; i++) {
           const d = addDays(start, i);
-          allDays.push({ date: d, success: !!scanMap.get(getDateKey(d)) });
+          allDays.push({ date: d, success: !!scanMap.get(getLocalDateKey(d)) });
         }
         setDays(allDays);
         setStreak(calcStreak(allDays));
@@ -138,12 +146,10 @@ export default function StreakPage() {
                     <div key={di} className="w-6 h-6 m-[1.5px] opacity-0" />
                   );
                 const isFuture = isAfter(cell.date, endOfYear(new Date()));
-                //   const isTodayOrPast =
-                //     !isFuture && !isBefore(cell.date, startOfYear(new Date()));
 
-                // NEW: Before account creation? Render as dim/inactive
                 const beforeCreated =
-                  scanStartAt && isBefore(cell.date, scanStartAt);
+                  scanStartAt &&
+                  getLocalDateKey(cell.date) <= getLocalDateKey(scanStartAt);
 
                 let color = "";
                 if (beforeCreated) {
@@ -156,6 +162,12 @@ export default function StreakPage() {
                   isToday(cell.date) ||
                   isBefore(cell.date, new Date())
                 ) {
+                  // console.log(
+                  //   "cell",
+                  //   getLocalDateKey(cell.date),
+                  //   "scanStartAt",
+                  //   scanStartAt ? getLocalDateKey(scanStartAt) : "null"
+                  // );
                   color = "bg-red-400 border-red-500";
                 } else {
                   color = "bg-muted-foreground/20 border-black/40";
