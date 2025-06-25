@@ -6,7 +6,7 @@ import { qrcodes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 function formatQrUrl(code: string) {
   return `${baseUrl}/scan/${code}`;
