@@ -3,7 +3,8 @@ import { useEffect, useState, useTransition } from "react";
 import { motion } from "framer-motion";
 import { UserCircle2, LogOut, Trash2, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 32, scale: 0.98 },
@@ -29,8 +30,16 @@ export default function AccountPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  const { status } = useSession();
+  const router = useRouter();
+
   useEffect(() => {
-    // Fetch user info from your API
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+      return;
+    }
+    if (status !== "authenticated") return;
+
     fetch("/api/user")
       .then((res) => res.json())
       .then((data) => {
@@ -41,7 +50,7 @@ export default function AccountPage() {
         setError("Failed to load user info.");
         setLoading(false);
       });
-  }, []);
+  }, [router, status]);
 
   // Sign out
   const handleSignOut = async () => {

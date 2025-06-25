@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 type QrCodeData = {
   code: string;
@@ -16,8 +17,13 @@ export default function QRPage() {
   const [qr, setQr] = useState<QrCodeData | null>(null);
   const [loading, setLoading] = useState(true);
   // Fetch QR on mount
+  const router = useRouter();
+
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+      return;
+    }
     fetch("/api/qr")
       .then((res) => res.json())
       .then(async (data) => {
@@ -34,7 +40,7 @@ export default function QRPage() {
           setLoading(false);
         }
       });
-  }, [status]);
+  }, [status, router]);
 
   if (status === "loading" || loading) {
     return <div>Loading QR code...</div>;

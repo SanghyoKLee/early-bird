@@ -13,6 +13,8 @@ import {
 } from "date-fns";
 import { Flame } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 // Calculate current streak (consecutive days up to today, ending at today or yesterday if missed)
 function calcStreak(days: { date: Date; success: boolean }[]) {
@@ -45,8 +47,16 @@ export default function StreakPage() {
     const [year, month, day] = dateString.split("-").map(Number);
     return new Date(year, month - 1, day); // JS months are 0-based
   }
+  const { status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+      return;
+    }
+    if (status !== "authenticated") return;
+
     fetch("/api/scans")
       .then((res) => res.json())
       .then(({ scans, scan_start_at }) => {
@@ -76,8 +86,14 @@ export default function StreakPage() {
         setStreak(calcStreak(allDays));
         setLoading(false);
       });
-  }, []);
-
+  }, [status, router]);
+  if (status === "loading" || status === "unauthenticated") {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary" />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center py-10">
       <div className="w-full flex flex-col items-center">

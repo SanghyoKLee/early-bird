@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import TimePicker from "./TimePicker";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function formatTime24to12(time: string) {
   if (!time) return "";
@@ -20,7 +22,15 @@ export default function SetWakeTimePage() {
   const [loading, setLoading] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const { status } = useSession();
+  const router = useRouter();
+
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+      return;
+    }
+    if (status !== "authenticated") return;
     fetch("/api/wake-time")
       .then((res) => res.json())
       .then((data) => {
@@ -30,7 +40,7 @@ export default function SetWakeTimePage() {
         }
         setLoading(false);
       });
-  }, []);
+  }, [status, router]);
 
   const handleSave = async (newTime: string) => {
     setLoading(true);

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ScanPage({
   params,
@@ -14,7 +15,7 @@ export default function ScanPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = use(params); // <--- unwrap the promise
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [step, setStep] = useState<
     "form" | "success" | "almost" | "late" | "invalid"
   >("form");
@@ -24,6 +25,16 @@ export default function ScanPage({
   const [message, setMessage] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
   const [minutesLate, setMinutesLate] = useState<number>(0);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+      return;
+    }
+    if (status !== "authenticated") return;
+  }, [router, status]);
 
   useEffect(() => {
     if (session?.user?.email) setEmail(session.user.email);
