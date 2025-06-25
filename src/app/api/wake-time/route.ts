@@ -1,7 +1,7 @@
 // src/app/api/wake-time/route.ts
 
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { db } from "@/db/db";
 import { userSettings } from "@/db/schema";
 import { eq } from "drizzle-orm";

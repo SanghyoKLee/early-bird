@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 import { db } from "@/db/db";
 import { qrcodes } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
+import { authOptions } from "@/lib/authOptions";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
