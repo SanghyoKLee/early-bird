@@ -4,7 +4,12 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import "@/app/globals.css";
 import { Providers } from "../providers";
 import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useState } from "react";
 
 export default function DashboardLayout({
@@ -28,6 +33,7 @@ export default function DashboardLayout({
             </button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-[220px]">
+            <SheetTitle>Sidebar</SheetTitle>
             <DashboardSidebar onNavigate={() => setOpen(false)} />
           </SheetContent>
         </Sheet>

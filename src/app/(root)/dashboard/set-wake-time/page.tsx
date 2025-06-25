@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TimePicker } from "./TimePicker";
+import TimePicker from "./TimePicker";
 
 function formatTime24to12(time: string) {
   if (!time) return "";

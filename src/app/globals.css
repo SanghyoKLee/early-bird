@@ -51,7 +51,7 @@
   --font-mono: "Geist Mono", monospace;
 
   /* Brand palette */
-  --primary: #ffd96a; /* Sunrise yellow */
+  --primary: #f4cd58; /* Sunrise yellow */
   --primary-hover: #fee188;
   --secondary: #74cde6; /* Clear sky blue */
   --secondary-dark: #3996af;
@@ -92,7 +92,7 @@
   --text: #fefefa;
   --text-light: #b3b3c2;
   --muted: #33334d;
-  --primary: #ffd96a;
+  --primary: #ffbf00;
   --secondary: #71d6ef;
   --accent: #5fc18a;
   --success: #50b78b;
