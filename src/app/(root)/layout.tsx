@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Early Bird",
-  description: "Wake up early, get more done.",
+  description: "Wake up on time. Beat the Snooze",
 };
 
 export default function RootLayout({
