@@ -81,15 +81,18 @@ export async function POST(req: Request) {
   const scheduledWakeTime = settingsRows[0].target_wake_time; // "07:00" string
 
   // 6. Check if scan is on time
-  const now = new Date();
+  const now = new Date(scanNow);
   const [wakeHour, wakeMinute] = scheduledWakeTime.split(":").map(Number);
   const targetDate = new Date(now);
   targetDate.setHours(wakeHour, wakeMinute, 0, 0);
 
   const msLate = now.getTime() - targetDate.getTime();
   const minutesLate = msLate > 0 ? Math.floor(msLate / 60000) : 0;
+
   const scanStatus =
     minutesLate <= 3 ? "success" : minutesLate <= 30 ? "almost" : "late";
+
+  console.log(minutesLate);
 
   // 7. Insert scan record (always, even if late)
   await db.insert(scans).values({

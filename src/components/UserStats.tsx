@@ -16,6 +16,7 @@ const UserStats = () => {
   }
   return (
     <div className="container mx-auto p-8">
+      <p>Session: {status}</p>
       <h1 className="text-3xl font-bold mb-4">Home Page</h1>
       <h2 className="text-xl mb-2">Logged in as:</h2>
       <p className="mb-1">
